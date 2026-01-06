@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  neo4j:
+    image: neo4j:latest # Use a specific version, e.g., 5.26-community
+    container_name: neo4j_db
+    ports:
+      - 7474:7474 # HTTP
+      - 7473:7473 # HTTPS
+      - 7687:7687 # Bolt
+    # network_mode: "pasta:-4"
+    #volumes:
+      # Use named volumes or map to a local directory for data persistence
+    #  - neo4j_data:/data
+#      - neo4j_logs:/logs
+      # Optional: Mount a local plugins directory if you need to add extensions
+      # - ./plugins:/plugins
+    volumes:
+        #- /$HOME/neo4j/logs:/logs
+        #- /$HOME/neo4j/config:/config
+        #- /$HOME/neo4j/data:/data
+        #- /$HOME/neo4j/plugins:/plugins
+        # Persist the database data
+        - ./neo4j_home/data:/data #:z
+        # Mount the local import folder to the container's import folder
+        - ./neo4j_home/import:/import #:z
+        # Optional: persist logs and configuration
+        - ./neo4j_home/logs:/logs #:z
+        - ./neo4j_home/conf:/conf #:z
+        - ./neo4j_home/plugins:/plugins #:z
+    environment:
+      NEO4J_dbms_security_allow__csv__import__from__file__urls: 'true'
+      #NEO4J_dbms_directories_import: ''
+      # Set the initial password (default is 'neo4j', you'll be prompted to change it)
+      NEO4J_AUTH: neo4j/pwd12345
+      # Enable file uploads via the browser and from the import directory
+      NEO4J_dbms_security_procedures_unrestricted: apoc.* # Optional, for APOC library access
+      NEO4J_apoc_import_file_enabled: true # Optional, if using APOC import features
+      NEO4J_dbms_directories_import: import # Explicitly sets the import directory (usually default)
+      # Accept the license agreement for the image to run
+      NEO4J_ACCEPT_LICENSE_AGREEMENT: 'yes'
+    restart: unless-stopped
