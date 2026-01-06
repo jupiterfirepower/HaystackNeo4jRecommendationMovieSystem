@@ -18,6 +18,8 @@ Download Neo4jDesktop from https://neo4j.com/docs/desktop/current/installation/ 
 
 clone github repository
 
+git clone https://github.com/jupiterfirepower/HaystackNeo4jRecommendationMovieSystem.git
+
 uv venv
 source .venv/bin/activate  # On macOS/Linux
 uv add -r requirements.txt
@@ -37,12 +39,12 @@ sudo dnf install cuda-toolkit
 
 sudo systemctl status ollama.service
 
-ollama pull deepseek-r1:1.5b
+# ollama pull deepseek-r1:1.5b
 # ollama serve
 # ollama stop
 # ollama stop deepseek-r1:1.5b
 ollama pull mxbai-embed-large
-ollama pull nomic-embed-text
+# ollama pull nomic-embed-text
 
 uv run generate_embeddings.py
 It's may continue 1-1.5 hours or less depend on hardware(processor etc)

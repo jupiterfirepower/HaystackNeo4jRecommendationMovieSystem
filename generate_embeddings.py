@@ -2,7 +2,6 @@ import os
 import numpy as np
 from dotenv import load_dotenv
 from neo4j import GraphDatabase
-from haystack.document_stores.in_memory import InMemoryDocumentStore
 from haystack_integrations.components.embedders.ollama import OllamaTextEmbedder
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import warnings
@@ -21,7 +20,6 @@ driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USERNAME, NEO4J_PASSWORD))
 
 # Initialize Haystack with OpenAI for text embeddings
 def initialize_haystack():
-    #document_store = InMemoryDocumentStore()
     embedder = OllamaTextEmbedder(model="mxbai-embed-large")
     return embedder
 

@@ -1,13 +1,8 @@
 import os
-
-import openai
 from dotenv import load_dotenv
 from haystack import Document, Pipeline
-#from haystack.components.embedders import OllamaTextEmbedder #, OpenAITextEmbedder
-from haystack.utils.auth import Secret
 from haystack_integrations.components.embedders.ollama import OllamaTextEmbedder
 
-# from haystack.schema import Filter
 from neo4j import GraphDatabase
 from neo4j_haystack import (
     Neo4jClientConfig,
@@ -24,13 +19,8 @@ NEO4J_URI = os.getenv("NEO4J_URI")
 NEO4J_USER = os.getenv("NEO4J_USER")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
 
-# OpenAI API key
-#OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-#openai.api_key = OPENAI_API_KEY
-
 # Initialize Neo4j driver
 driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
-
 
 # Step 1: Fetch related movies using multi-hop reasoning from Neo4j
 def fetch_multi_hop_related_movies(title):
@@ -64,11 +54,6 @@ document_store = Neo4jDocumentStore(
     similarity="cosine",  # Cosine similarity for vector search
     verify_connectivity=True,
 )
-
-# Initialize Haystack's OpenAITextEmbedder for creating embeddings
-#text_embedder = OpenAITextEmbedder(
-#    api_key=Secret.from_env_var("OPENAI_API_KEY"), model="text-embedding-ada-002"
-#)
 
 text_embedder = OllamaTextEmbedder(model="mxbai-embed-large")
 
@@ -172,39 +157,9 @@ def perform_optimized_search(query, top_k, parts):
         print(f"Title: {title}\nOverview: {overview}\n{'-' * 40}")
         parts.append(f"Title: {title}\nOverview: {overview}\n{'-' * 40}\n")
 
-
-# Main function to execute all use cases
-def main():
-    parts = []
-    #movie_title = "Jurassic Park"
-    movie_title = "Mission to Mir"
-    #search_query = "Find movies about dinosaurs"
-    search_query = "Find movies about cold-war"
-
-    parts.append("=== Context-Aware Search with Multi-Hop Reasoning ===")
-    print("=== Context-Aware Search with Multi-Hop Reasoning ===")
-    perform_semantic_search_with_multi_hop(search_query, movie_title, parts)
-
-    parts.append("=== Dynamic Filtered Search ===")
-    print("=== Dynamic Filtered Search ===")
-    #perform_filtered_search("Movies about space exploration", parts)
-    perform_filtered_search(search_query, parts)
-
-    print("=== Optimized Search for Recommendations ===")
-    perform_optimized_search("Recommend movies about time travel", 10, parts)
-
-
-from haystack.components.builders import PromptBuilder
-# ... (import other necessary haystack components)
-
-# Assume 'rag_pipeline' is your defined Haystack pipeline
-# from your_haystack_script import rag_pipeline
-
 def predict(movie_title_value,find_movie_value, recommend_movie_value):
     parts = []
-    # movie_title = "Jurassic Park"
     movie_title = movie_title_value
-    # search_query = "Find movies about dinosaurs"
     search_query = find_movie_value
 
     parts.append("=== Context-Aware Search with Multi-Hop Reasoning ===\n")
@@ -234,5 +189,4 @@ gr_face = gr.Interface(
 )
 
 if __name__ == "__main__":
-    #main()
     gr_face.launch()

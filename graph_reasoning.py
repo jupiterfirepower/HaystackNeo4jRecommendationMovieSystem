@@ -1,8 +1,7 @@
 import os
-import openai
-from neo4j_haystack import Neo4jDocumentStore, Neo4jClientConfig, Neo4jEmbeddingRetriever
+from neo4j_haystack import Neo4jDocumentStore, Neo4jClientConfig
 from haystack_integrations.components.embedders.ollama import OllamaTextEmbedder
-from haystack import Pipeline, Document
+from haystack import Document
 from neo4j import GraphDatabase
 from dotenv import load_dotenv
 
@@ -28,7 +27,6 @@ document_store = Neo4jDocumentStore(
     client_config=client_config,
     index="overview_embeddings",  # The name of the Vector Index in Neo4j
     node_label="Movie",  # Label to Neo4j nodes which store Documents
-    #embedding_dim=1536,  # Dimension of embeddings (for OpenAI ADA it's 1536)
     embedding_dim=1024,  # Dimension of embeddings (for Ollama)
     embedding_field="embedding",
     similarity="cosine",  # Cosine similarity for vector search
