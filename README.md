@@ -45,8 +45,9 @@ git clone https://github.com/jupiterfirepower/HaystackNeo4jRecommendationMovieSy
 
 uv venv
 source .venv/bin/activate  # On macOS/Linux
-# uv add -r requirements.txt
-uv pip install -r requirements.txt
+Do'nt use command:
+uv add -r requirements.txt
+# uv pip install -r requirements.txt
 # uv sync
 
 # Run graph_build.py from Dev IDE or terminal (Developing and tested in Python3.14)
@@ -67,10 +68,11 @@ sudo systemctl status ollama.service
 
 # ollama pull deepseek-r1:1.5b
 # ollama stop deepseek-r1:1.5b
-ollama pull mxbai-embed-large
+# ollama pull mxbai-embed-large
 # ollama pull nomic-embed-text
 
 uv run generate_embeddings.py
+or run directly from IDE fro example JetBrains PyCharm
 # It's may continue 1-1.5 hours or less depend on hardware(processor etc)
 
 uv run graph_rag_recommend_search.py
